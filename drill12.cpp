@@ -77,7 +77,7 @@ try {
     win.wait_for_button();
 
     // 12.7.7 Fill
-    r.set_fill_color(Color::dark_yellow);    // color the inside of the rectangle
+    r.set_fill_color(Color::dark_yellow);    // color the inside the rectangle
     poly.set_style(Line_style(Line_style::dash, 10));
     poly_rect.set_style(Line_style(Line_style::dash, 5));
     poly_rect.set_fill_color(Color::black);
