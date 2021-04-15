@@ -5,6 +5,7 @@
 
 using namespace std;
 
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 
 void error(string s)
