@@ -1,6 +1,7 @@
 #include "../GUI/Simple_window.h"
 #include "../GUI/Graph.h"
 
+
 #include <iostream>
 
 double one(double x) { return 1; }
