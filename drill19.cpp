@@ -1,114 +1,108 @@
-#include "std_lib_facilities.h"
+#include <iostream>
+#include <string>
+#include <vector>
 
-template<typename T> 
-struct S
-{
-    private:
-       T val;
-       T n_val;
-    public:   
-	   explicit S(T v=0) : val{v} {};
-       
-	   T& get();
-	   const T& get() const;
+template<typename T>
+struct S {
 
-	   void set(T n_val) {val=n_val;};
+private:
+    T val;
+    
+    public:
+    explicit S(T vv = 0) : val{vv} { }   // feltöltjük
+
+    S& operator=(const T&);
+
+    T& get();
+    
+    const T& get() const;    // structúrán kívül
+    
+
 };
 
 template<typename T>
 T& S<T>::get()
 {
-	return val;
+    return val;		// privát vektorban tárolt érték előhív
 }
 
 template<typename T>
 const T& S<T>::get() const
 {
-	return val;
+    return val;		// konstansal ugyanez
 }
 
-template<typename T>
+template<typename T> 
 void read_val(T& v)
 {
-	cin>>v;
+    std::cin >> v;		//beolvasunk a vektorunkba
 }
 
 template<typename T>
-ostream& operator<<(ostream& os, vector<T>& v)
+S<T>& S<T>::operator=(const T& s)
 {
-    os<<"{";
-    for(int i=0; i<v.size(); ++i)
-    {
-        os<<v[i]<<(i<v.size()-1?", ");
+    val = s;
+    return *this; 	// self-reference
+}
+
+template<typename T>
+std::ostream& operator<<(std::ostream& os, std::vector<T>& v)		// adatok kiírása 
+{
+    os << "{ ";
+    for (int i = 0; i < v.size(); ++i) {
+        os << v[i] << (i < v.size() - 1 ? ", " : " ");
     }
-    os<<"}\n";
+    os << "}\n";
 
     return os;
 }
 
 template<typename T>
-istream& operator>>(istream& is, vector<T>& v)
+std::istream& operator>>(std::istream& is, std::vector<T>& v)  		// adatok beírása
 {
-    char c=0;
-    is>>c;
-    if(c!='{'){
+    char ch = 0;
+    is >> ch;
+    if (ch != '{') {
         is.unget();
         return is;
     }
-    for(T val; is>>val;){
+
+    for (T val; is >> val; ) {
         v.push_back(val);
-        is>>c;
-        if (c!=',') break;
+        is >> ch;
+        if (ch != ',') break;
     }
+
     return is;
 }
 
+
 int main()
 {
-	S<int> S_int {9};
-        cout<<S_int.get()<<endl;
+    S<int> si {987654321};
+    S<char> sc {'W'};
+    S<double> sd {420.69};
+    S<std::string> s {"Vezendi"};
+    S<std::vector<int>> svi { std::vector<int>{1, 2, 3, 4, 4747, 8989}};
 
-	S<char> S_char {'r'};
-        cout<<S_char.get()<<endl;
+    std::cout << "S<int> : " << si.get() << '\n'
+              << "S<char> : " << sc.get() << '\n'
+              << "S<double> : " << sd.get() << '\n'
+              << "S<string> : " << s.get() << '\n'
+              << "S<vector<int>> : " << svi.get() << '\n';
 
-	S<double> S_double {22.5};
-        cout<<S_double.get()<<endl;
+   
 
-	S<string> S_string {"Valami"};
-        cout<<S_string.get()<<endl;
+    sd = 69.20;
+    std::cout << "S<double> : " << sd.get() << '\n';
 
-	S<vector<int>> S_vector {vector<int>{12, 34, 56, 78}};
-        cout<<S_vector.get()<<endl;
+    std::cout << "Reads:\n";
 
-    int i;
-    cout<<"Int: ";
-    read_val(i);
-    S<int> S_int2 {i};
-    cout<<S_int2.get()<<endl;
-
-    char c;
-    cout<<"Char: ";
-    read_val(c);
-    S<char> S_char2 {c};
-    cout<<S_char2.get()<<endl;
-
-    double d;
-    cout<<"Double: ";
-    read_val(d);
-    S<double> S_double2 {d};
-    cout<<S_double2.get()<<endl;
-
-    string s;
-    cout<<"String: ";
-    read_val(s);
-    S<string> S_string2 {s};
-    cout<<S_string2.get()<<endl;
-
-    vector<int> v2;
-    cout<<"Vector<int> { val1, val2, val3 }: ";
-    read_val(v2);
-    S<vector<int>> S_vector2 {v2};
-    cout<<S_vector2.get();
     
-    return 0;
+    std::cout << "Vector<int>: (format: { val1, val2, val3 }) ";
+    std::vector<int> vi2;
+    read_val(vi2);
+    S<std::vector<int>> svi2 {vi2};
+
+    std::cout << "S<vector<int>> read: " << svi2.get() << '\n';
 }
